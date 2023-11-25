@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import {
   Form,
@@ -8,62 +8,64 @@ import {
   AddButton,
 } from './ContactForm.styled';
 
-export class ContactForm extends Component {
-  state = { name: '', number: '' };
+export const ContactForm = ({ onSubmit }) => {
+  const [formContact, setFormContact] = useState({ name: '', number: '' });
 
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.currentTarget;
+    console.log(name);
+    console.log(value);
 
-    this.setState({ [name]: value });
+    setFormContact(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
 
-    this.props.onSubmit(this.state);
-
-    this.reset();
+    onSubmit(formContact);
+    reset();
   };
 
-  reset = () => {
-    this.setState({ name: '', number: '' });
+  const reset = () => {
+    setFormContact({ name: '', number: '' });
   };
 
-  render() {
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormContainer>
-          <Label>
-            Name
-            <Input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChange}
-              required
-              placeholder="Rosie Simpson"
-              pattern="^[a-zA-Zа-яА-ЯІіЇїЄє]+(([' \-][a-zA-Zа-яА-ЯІіЇїЄє ])?[a-zA-Zа-яА-ЯІіЇїЄє])+$"
-            ></Input>
-          </Label>
-        </FormContainer>
+  return (
+    <Form onSubmit={handleSubmit}>
+      <FormContainer>
+        <Label>
+          Name
+          <Input
+            type="text"
+            name="name"
+            value={formContact.name}
+            onChange={handleChange}
+            required
+            placeholder="Rosie Simpson"
+            pattern="[a-zA-Zа-яА-ЯІіЇїЄє ]+(([' \-][a-zA-Zа-яА-ЯІіЇїЄє ])?[a-zA-Zа-яА-ЯІіЇїЄє])+$"
+          ></Input>
+        </Label>
+      </FormContainer>
 
-        <FormContainer>
-          <Label>
-            Number
-            <Input
-              type="tel"
-              name="number"
-              value={this.state.number}
-              onChange={this.handleChange}
-              required
-              placeholder="459-12-56"
-              pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-            ></Input>
-          </Label>
-        </FormContainer>
+      <FormContainer>
+        <Label>
+          Number
+          <Input
+            type="tel"
+            name="number"
+            value={formContact.number}
+            onChange={handleChange}
+            required
+            placeholder="459-12-56"
+            pattern="\+?[0-9\s\-\(\)]+"
+          ></Input>
+        </Label>
+      </FormContainer>
 
-        <AddButton type="submit">Add Contact</AddButton>
-      </Form>
-    );
-  }
-}
+      <AddButton type="submit">Add Contact</AddButton>
+    </Form>
+  );
+};
