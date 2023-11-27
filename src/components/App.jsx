@@ -26,11 +26,11 @@ export const App = () => {
       alert(`${data.name} is already in contacts.`);
       return;
     }
-    setContacts([...contacts, { id: nanoid(), ...data }]);
+    setContacts(prev => [...prev, { id: nanoid(), ...data }]);
   };
 
   const onDeleteContact = name => {
-    setContacts(contacts.filter(contact => contact.name !== name));
+    setContacts(prev => prev.filter(contact => contact.name !== name));
   };
 
   const filterHandleChange = event => {
@@ -38,7 +38,6 @@ export const App = () => {
   };
 
   const getFilteredContacts = () => {
-    console.log(contacts);
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
